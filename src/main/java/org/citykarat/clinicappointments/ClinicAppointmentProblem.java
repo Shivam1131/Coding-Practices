@@ -98,7 +98,7 @@ public class ClinicAppointmentProblem {
                 .filter(appointment -> appointment.doctorId == doctorId
                         && appointment.status == AppointmentStatus.COMPLETED)
                 .collect(Collectors.groupingBy(e->e.visitType,
-                        Collectors.averagingInt(e->e.durationMinutes)));
+                        Collectors.averagingDouble(e->e.durationMinutes)));
     }
 
     List<Doctor> doctors = new ArrayList<>(sampleDoctors());
