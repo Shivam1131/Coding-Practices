@@ -1,6 +1,8 @@
 package org.citykarat_new.account;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class AccountService {
 
@@ -15,7 +17,13 @@ public class AccountService {
      * - return true on successful transfer, false otherwise
      */
     public boolean transfer(Account source, Account destination, long amountInCents) {
-        throw new UnsupportedOperationException("TODO: implement transfer");
+        if(amountInCents <= 0L || Objects.isNull(source) || Objects.isNull(destination) || source.getBalanceInCents() < amountInCents) {
+            return false;
+        }
+        source.withdraw(amountInCents);
+        destination.deposit(amountInCents);
+        return true;
+       // throw new UnsupportedOperationException("TODO: implement transfer");
     }
 
     /*
@@ -23,7 +31,8 @@ public class AccountService {
      * Return the total amount withdrawn from an account.
      */
     public long totalWithdrawals(Account account) {
-        throw new UnsupportedOperationException("TODO: implement totalWithdrawals");
+        return account.getTransactions().stream().filter(t->t.getType().equals(Transaction.Type.WITHDRAWAL)).mapToLong(e->e.getAmountInCents()).sum();
+        //throw new UnsupportedOperationException("TODO: implement totalWithdrawals");
     }
 
     /*
@@ -32,6 +41,7 @@ public class AccountService {
      * Preserve input order.
      */
     public List<String> accountsBelowBalance(List<Account> accounts, long thresholdInCents) {
-        throw new UnsupportedOperationException("TODO: implement accountsBelowBalance");
+        return accounts.stream().filter(a->a.getBalanceInCents() < thresholdInCents).map(acc->acc.getAccountId()).collect(Collectors.toList());
+       // throw new UnsupportedOperationException("TODO: implement accountsBelowBalance");
     }
 }

@@ -42,7 +42,8 @@ public class Account {
      * Fix the existing implementation.
      */
     public boolean withdraw(long amountInCents) {
-        if (amountInCents > balanceInCents) {
+        System.out.print(balanceInCents);
+        if (amountInCents > balanceInCents || amountInCents <= 0) {
             return false;
         }
 

@@ -1,8 +1,9 @@
 package org.citykarat_new.passagetracker;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import jdk.jfr.Event;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class PassageTracker {
 
@@ -21,7 +22,7 @@ public class PassageTracker {
                 inside.add(event.getPersonId());
             } else {
                 // Existing implementation. Do not assume it is correct.
-                inside.add(event.getPersonId());
+                inside.remove(event.getPersonId());
             }
         }
 
@@ -38,7 +39,22 @@ public class PassageTracker {
      * Ignore an EXIT if that person is not currently inside.
      */
     public java.util.Map<String, Integer> countCompletePassages(List<PassageEvent> events) {
-        throw new UnsupportedOperationException("TODO: implement countCompletePassages");
+        events.sort(Comparator.comparing(e->e.getTimestamp()));
+
+        java.util.Map<String, Integer> resultMap = new java.util.HashMap<String, Integer>();
+
+        Set<String> inside = new HashSet<>();
+        for(PassageEvent event: events) {
+            if(event.getType() == PassageEvent.Type.ENTER){
+                inside.add(event.getPersonId());
+            } else {
+                if (inside.contains(event.getPersonId())){
+                    resultMap.put(event.getPersonId(), resultMap.getOrDefault(event.getPersonId(), 0)+1);
+                    inside.remove(event.getPersonId());
+                }
+            }
+        }
+        return resultMap;
     }
 
     /*
@@ -46,7 +62,28 @@ public class PassageTracker {
      * Return the average duration of complete passages for one person.
      * Return null if the person has no complete passage.
      */
+
+    // Steps: filter by personId,   2-> check if entry is present then take current time and
     public Double averagePassageDuration(List<PassageEvent> events, String personId) {
-        throw new UnsupportedOperationException("TODO: implement averagePassageDuration");
+        events = events.stream()
+                .filter(e->e.getPersonId().equals(personId))
+                .collect(Collectors.toList());
+
+        List<Long> durations = new ArrayList<>();
+        java.util.Map<String, Integer> resultMap = new java.util.HashMap<String, Integer>();
+        Long enterTime = null;
+        for(PassageEvent event: events) {
+            if(event.getType() == PassageEvent.Type.ENTER){
+                enterTime = event.getTimestamp();
+            } else if(event.getType() == PassageEvent.Type.EXIT && Objects.nonNull(enterTime)) {
+                durations.add(event.getTimestamp() - enterTime);
+                enterTime =null;
+            }
+        }
+        return durations
+                .stream()
+                .mapToLong(d->d)
+                .average().orElse(0.0D);
+        //throw new UnsupportedOperationException("TODO: implement averagePassageDuration");
     }
 }
