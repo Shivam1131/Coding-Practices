@@ -3,7 +3,6 @@ package org.citykarat.obstaclecourse;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 class Course {
     String title;
@@ -44,6 +43,45 @@ public class ObstacleCourseProblem {
     }
 
     // TODO 1: Return the fastest complete run time.
+    // Expected from raw data: 17
+    /*public int personalBest() {
+
+    }*/
+
+    // TODO 2: Best possible total by taking fastest time for each obstacle.
+    // Use complete and incomplete runs.
+    // Obstacle 1 fastest = 3
+    // Obstacle 2 fastest = 4
+    // Obstacle 3 fastest = 3
+    // Obstacle 4 fastest = 5
+    // Expected total = 15
+    public int bestOfBests() {
+        int total = 0;
+
+
+
+        return total;
+    }
+
+    // TODO 3: Use simulation to estimate chance that an in-progress run
+    // will match or beat the current personal best.
+    public double chanceOfPersonalBest(Run inProgressRun) {
+       return 0.0d;
+    }
+
+    private List<Integer> getKnownTimesForObstacle(int obstacleIndex) {
+        List<Integer> possibleTimes = new ArrayList<>();
+
+        for (Run run : runs) {
+            if (run.obstacleTimes.size() > obstacleIndex) {
+                possibleTimes.add(run.obstacleTimes.get(obstacleIndex));
+            }
+        }
+
+        return possibleTimes;
+    }
+
+  /*  // TODO 1: Return the fastest complete run time.
     // Expected from raw data: 17
     public int personalBest() {
         return runs.stream()
@@ -124,7 +162,7 @@ public class ObstacleCourseProblem {
         }
 
         return possibleTimes;
-    }
+    }*/
 
     List<Run> runs = new ArrayList<>(sampleRuns());
 }

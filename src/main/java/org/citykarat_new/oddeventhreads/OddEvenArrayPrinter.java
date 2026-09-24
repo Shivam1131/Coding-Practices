@@ -24,11 +24,6 @@ public class OddEvenArrayPrinter {
     }
 
 
-
-
-
-
-
     private void printOddNumbers1(){
         while(index< numbers.length) {
             synchronized (lock) {
@@ -41,10 +36,10 @@ public class OddEvenArrayPrinter {
                         lock.wait();
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
+                        return;
                     }
                 }
             }
-
         }
     }
 
@@ -60,6 +55,7 @@ public class OddEvenArrayPrinter {
                         lock.wait();
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
+                        return;
                     }
                 }
             }

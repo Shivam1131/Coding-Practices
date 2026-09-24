@@ -1,7 +1,7 @@
 package org.example.designpattern.singleton;
 
 public class AppConfig {
-    private static AppConfig instance;
+    private static volatile AppConfig instance;
 
     private String appName = "Coding Prep";
     private String environment = "local";
